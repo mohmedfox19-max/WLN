@@ -3,449 +3,887 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WLN Team Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<title>WLN Team – Task Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#f8f9fa;
-  --surface:#ffffff;
-  --surface2:#f3f4f6;
-  --border:#d1d5db;
-  --accent:#0066cc;
-  --accent2:#003d99;
-  --fp:#059669;
-  --qa:#7c3aed;
-  --lidar:#1f2937;
-  --lane:#4b5563;
-  --text:#1f2937;
-  --muted:#6b7280;
-  --danger:#dc2626;
-  --warn:#d97706;
+/* ─── RESET & BASE ─────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --blue:       #1c4587;
+  --blue-dark:  #163a75;
+  --blue-mid:   #2a5ba8;
+  --blue-pale:  #dce8f8;
+  --blue-xpale: #f0f5fc;
+  --white:      #ffffff;
+  --bg:         #f4f6fb;
+  --border:     #cdd5e3;
+  --border-lt:  #e4e9f2;
+  --text:       #1a2540;
+  --text-mid:   #3d4f6e;
+  --muted:      #6b7a99;
+  --green:      #1a6e45;
+  --green-pale: #e4f4ec;
+  --red:        #b91c1c;
+  --red-pale:   #fce8e8;
+  --amber:      #92580a;
+  --amber-pale: #fef3e2;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,102,204,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,102,204,.05) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0;}
 
-/* HEADER */
-header{position:relative;z-index:10;padding:16px 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.08);}
-.logo{display:flex;align-items:center;gap:12px;}
-.logo-badge{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#fff;box-shadow:0 2px 8px rgba(0,102,204,.25);}
-.logo-text h1{font-size:18px;font-weight:900;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.logo-text p{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
-#clock{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--accent);letter-spacing:2px;}
+body {
+  font-family: 'Tajawal', 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.5;
+}
 
-/* MAIN */
-main{position:relative;z-index:5;max-width:1100px;margin:0 auto;padding:28px 24px;}
+/* ─── HEADER ───────────────────────────────────────── */
+header {
+  background: var(--blue);
+  height: 60px;
+  padding: 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 6px rgba(0,0,0,.18);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
 
-/* WEEK NAV */
-.week-bar{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.05);}
-.week-label{font-size:15px;font-weight:800;color:var(--accent);}
-.week-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-.week-nav{display:flex;gap:8px;}
-.week-nav button{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;font-size:14px;transition:all .2s;display:flex;align-items:center;justify-content:center;}
-.week-nav button:hover{border-color:var(--accent);color:var(--accent);background:var(--surface);}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-/* PASTE */
-.paste-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.05);}
-.paste-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
-.paste-row{display:flex;gap:10px;align-items:flex-start;}
-textarea{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:13px;min-height:105px;resize:vertical;outline:none;transition:border-color .2s;line-height:1.7;}
-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,102,204,.1);}
-textarea::placeholder{color:var(--muted);font-size:12px;}
-.parse-btn{padding:12px 20px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:800;cursor:pointer;white-space:nowrap;min-width:110px;transition:opacity .2s,transform .1s;box-shadow:0 2px 8px rgba(0,102,204,.25);}
-.parse-btn:hover{opacity:.88;transform:translateY(-2px);}
-.parse-btn:active{transform:scale(.97);}
-.err{font-size:12px;color:var(--danger);margin-top:8px;min-height:16px;}
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  background: var(--white);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+  letter-spacing: .5px;
+  flex-shrink: 0;
+}
 
-/* DATE PICKER for day override */
-.date-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.date-row label{font-size:12px;color:var(--muted);}
-.date-row select{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:13px;outline:none;cursor:pointer;transition:border-color .2s;}
-.date-row select:focus{border-color:var(--accent);}
+.brand-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: .2px;
+}
 
-/* PROGRESS CARDS */
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
-.pcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;position:relative;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);}
-.pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--cc);}
-.pcard::after{content:'';position:absolute;bottom:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:var(--cc);opacity:.08;pointer-events:none;}
-.pcard-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.pcard-title{font-size:16px;font-weight:800;color:var(--cc);}
-.pcard-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-.pcard-icon{font-size:28px;opacity:.7;}
-.stats2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
-.sbox{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;}
-.sbox-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
-.sbox-val{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;line-height:1.1;}
-.sbox-hint{font-size:10px;color:var(--muted);margin-top:1px;}
-.pbar-wrap{margin-top:2px;}
-.pbar-top{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;}
-.pbar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;}
-.pbar-fill{height:100%;border-radius:4px;transition:width .6s ease;position:relative;overflow:hidden;}
-.pbar-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:sh 2s infinite;}
-@keyframes sh{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.brand-sep {
+  width: 1px;
+  height: 18px;
+  background: rgba(255,255,255,.28);
+}
 
-/* TABLE */
-.tcard{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.05);}
-.thead-bar{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface2);}
-.thead-title{font-size:14px;font-weight:700;color:var(--text);}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-th{padding:10px 14px;text-align:right;color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase;background:var(--surface2);border-bottom:1px solid var(--border);}
-td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle;}
-tr:last-child td{border-bottom:none;}
-tr:hover td{background:rgba(0,102,204,.03);}
-.today-row td{background:rgba(0,102,204,.06);}
-.daydot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-left:6px;background:var(--muted);}
-.today-row .daydot{background:var(--fp);box-shadow:0 0 5px var(--fp);}
-.nfp{color:var(--fp);font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;}
-.nqa{color:var(--qa);font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;}
-.chip{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;}
-.ok{background:rgba(5,150,105,.1);color:var(--fp);}
-.mid{background:rgba(217,119,6,.1);color:var(--warn);}
-.off{background:rgba(107,114,128,.08);color:var(--muted);}
-.pmini{height:5px;background:var(--border);border-radius:3px;overflow:hidden;min-width:60px;margin-top:3px;}
-.pmini-f{height:100%;border-radius:3px;transition:width .5s;}
+.brand-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,.65);
+  font-weight: 400;
+}
 
-.alert{border-radius:12px;padding:12px 18px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;}
-.alert.ok2{background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.25);color:var(--fp);}
-.alert.warn2{background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.25);color:var(--danger);}
-.alert.info2{background:rgba(0,102,204,.08);border:1px solid rgba(0,102,204,.2);color:var(--accent);}
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
 
-.reset-btn{background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.25);color:var(--danger);border-radius:8px;padding:6px 13px;font-family:'Tajawal',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;}
-.reset-btn:hover{background:rgba(220,38,38,.15);}
+.today-label {
+  text-align: left;
+  font-size: 12px;
+  color: rgba(255,255,255,.7);
+  line-height: 1.4;
+}
 
-@media(max-width:700px){.cards{grid-template-columns:1fr;}main{padding:14px;}.paste-row{flex-direction:column;}}
+.today-label strong {
+  display: block;
+  font-size: 13px;
+  color: #fff;
+  font-weight: 600;
+}
+
+#clock {
+  font-family: 'Inter', monospace;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(255,255,255,.13);
+  padding: 5px 14px;
+  border-radius: 4px;
+  letter-spacing: 1.5px;
+}
+
+/* ─── LAYOUT ───────────────────────────────────────── */
+main {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 28px 24px 48px;
+}
+
+/* ─── PAGE HEADER ──────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-header h2 {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.page-header p {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.week-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--blue-pale);
+  border: 1px solid #b3ccf0;
+  border-radius: 5px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--blue);
+  white-space: nowrap;
+}
+
+.week-nav-btns {
+  display: flex;
+  gap: 4px;
+  margin-right: 8px;
+}
+
+.week-nav-btns button {
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  border: 1px solid #b3ccf0;
+  background: var(--white);
+  color: var(--blue);
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s;
+}
+
+.week-nav-btns button:hover { background: var(--blue-pale); }
+
+/* ─── INPUT SECTION ────────────────────────────────── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.card-head {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-lt);
+  background: var(--blue-xpale);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-head-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: .8px;
+}
+
+.card-body { padding: 20px; }
+
+.field-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.day-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.day-row select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 7px 11px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+
+.day-row select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(28,69,135,.08); }
+
+.input-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+textarea.report-input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 11px 13px;
+  font-family: 'Inter', monospace;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.8;
+  min-height: 108px;
+  resize: vertical;
+  outline: none;
+  transition: border-color .15s;
+  direction: ltr;
+  text-align: left;
+}
+
+textarea.report-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(28,69,135,.08);
+}
+
+textarea.report-input::placeholder {
+  color: #b0baca;
+  font-size: 11px;
+}
+
+.btn-primary {
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 22px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s;
+  min-width: 110px;
+}
+
+.btn-primary:hover  { background: var(--blue-dark); }
+.btn-primary:active { background: #122f5e; }
+
+.err-text {
+  font-size: 12px;
+  color: var(--red);
+  margin-top: 8px;
+  min-height: 16px;
+}
+
+/* ─── KPI STRIP ────────────────────────────────────── */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.kpi-box {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 18px;
+  border-top: 3px solid var(--blue);
+  position: relative;
+}
+
+.kpi-box.right-border { border-top-color: var(--blue-mid); }
+
+.kpi-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .7px;
+  margin-bottom: 6px;
+}
+
+.kpi-value {
+  font-family: 'Inter', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.kpi-box.right-border .kpi-value { color: var(--blue-mid); }
+
+.kpi-meta {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ─── PROGRESS TABLE ───────────────────────────────── */
+.prog-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.prog-table th {
+  padding: 10px 16px;
+  text-align: right;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: .7px;
+  background: var(--blue-xpale);
+  border-bottom: 1px solid var(--border);
+}
+
+.prog-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border-lt);
+  vertical-align: middle;
+}
+
+.prog-table tr:last-child td { border-bottom: none; }
+.prog-table tbody tr:hover td { background: var(--blue-xpale); }
+
+.cat-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.type-label {
+  font-size: 12px;
+  color: var(--text-mid);
+  font-weight: 500;
+}
+
+.metric-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.metric-of {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.pbar-track {
+  height: 6px;
+  background: var(--border-lt);
+  border-radius: 3px;
+  overflow: hidden;
+  min-width: 100px;
+}
+
+.pbar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--blue);
+  transition: width .55s ease;
+}
+
+.pbar-fill.qa { background: var(--blue-mid); }
+
+.pbar-pct {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .3px;
+}
+
+.s-done  { background: var(--green-pale);  color: var(--green); }
+.s-prog  { background: var(--blue-pale);   color: var(--blue); }
+.s-warn  { background: var(--amber-pale);  color: var(--amber); }
+.s-none  { background: var(--bg);          color: var(--muted); }
+.s-late  { background: var(--red-pale);    color: var(--red); }
+
+/* ─── LOG TABLE ────────────────────────────────────── */
+.log-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.log-table th {
+  padding: 9px 16px;
+  text-align: right;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: .7px;
+  background: var(--blue-xpale);
+  border-bottom: 1px solid var(--border);
+}
+
+.log-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border-lt);
+  color: var(--text-mid);
+  vertical-align: middle;
+}
+
+.log-table tr:last-child td { border-bottom: none; }
+.log-table tr:hover td { background: var(--blue-xpale); }
+
+.log-time {
+  font-family: 'Inter', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.log-num {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.empty-row td {
+  text-align: center;
+  padding: 28px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ─── NOTICE BAR ───────────────────────────────────── */
+.notice {
+  border-radius: 6px;
+  padding: 11px 16px;
+  font-size: 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.notice.info  { background: var(--blue-pale);  border: 1px solid #b3ccf0; color: var(--blue); }
+.notice.ok    { background: var(--green-pale);  border: 1px solid #a7d9bc; color: var(--green); }
+.notice.warn  { background: var(--amber-pale);  border: 1px solid #f0d09a; color: var(--amber); }
+.notice.error { background: var(--red-pale);    border: 1px solid #f0a9a9; color: var(--red); }
+
+.notice-icon { font-size: 15px; margin-top: 1px; flex-shrink: 0; }
+
+/* ─── SECTION DIVIDER ──────────────────────────────── */
+.section-gap { margin-bottom: 20px; }
+
+/* ─── UTIL ─────────────────────────────────────────── */
+.btn-danger {
+  background: transparent;
+  border: 1px solid #e0b4b4;
+  color: var(--red);
+  border-radius: 4px;
+  padding: 5px 13px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-danger:hover { background: var(--red-pale); }
+
+@media (max-width: 720px) {
+  .kpi-strip { grid-template-columns: 1fr 1fr; }
+  main { padding: 16px; }
+  header { padding: 0 16px; }
+  .brand-sep, .brand-sub { display: none; }
+  .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
 </style>
 </head>
 <body>
 
+<!-- ═══ HEADER ═══════════════════════════════════════ -->
 <header>
-  <div class="logo">
-    <div class="logo-badge">WLN</div>
-    <div class="logo-text">
-      <h1>WLN TEAM TRACKER</h1>
-      <p>Smart Report Parser · تحليل تقارير تلقائي</p>
-    </div>
+  <div class="brand">
+    <div class="brand-mark">WLN</div>
+    <div class="brand-title">WLN Team</div>
+    <div class="brand-sep"></div>
+    <div class="brand-sub">Task Tracking System</div>
   </div>
-  <div id="clock">--:--:--</div>
+  <div class="header-meta">
+    <div class="today-label">
+      <span id="headerDay">—</span>
+      <strong id="headerDate">—</strong>
+    </div>
+    <div id="clock">--:--:--</div>
+  </div>
 </header>
 
+<!-- ═══ MAIN ══════════════════════════════════════════ -->
 <main>
 
-  <!-- WEEK NAV -->
-  <div class="week-bar">
+  <!-- Page header -->
+  <div class="page-header">
     <div>
-      <div class="week-label" id="wklabel">الأسبوع الحالي</div>
-      <div class="week-sub"  id="wkrange">—</div>
+      <h2>لوحة متابعة التاسكات</h2>
+      <p>الصق تقرير نهاية الشيفت — يتم التحليل والتحديث تلقائياً</p>
     </div>
-    <div class="week-nav">
-      <button onclick="changeWeek(-1)" title="السابق">&#8594;</button>
-      <button onclick="changeWeek(1)"  title="التالي">&#8592;</button>
-    </div>
-  </div>
-
-  <!-- PASTE -->
-  <div class="paste-card">
-    <div class="paste-title">📋 الصق تقرير الشيفت هنا</div>
-    <div class="date-row">
-      <label>اليوم:</label>
-      <select id="dayPicker"></select>
-    </div>
-    <div class="paste-row">
-      <textarea id="msgBox" placeholder="For Lidar (MSL Relabeling & LiDAR ONLY & SC3 filtered) (9 Mar):
-Submitted: 946 FP LiDAR / 683 QA LiDAR
-Remaining: 554  FP Tasks from 1,500 tasks / 1,117 QA Tasks from 1,800 tasks
-For Lane Line (LiDAR & IMAGE & MSL Relabeling) (9 Mar):
-Submitted: 1,617 FP Lane Line / 1,266 QA Lane Line
-Remaining: 2,383 FP Tasks from 4000 tasks"></textarea>
-      <button class="parse-btn" onclick="parseMsg()">⚡ تحليل</button>
-    </div>
-    <div class="err" id="errMsg"></div>
-  </div>
-
-  <!-- PROGRESS CARDS -->
-  <div class="cards">
-    <div class="pcard" style="--cc:var(--lidar)">
-      <div class="pcard-header">
-        <div>
-          <div class="pcard-title">🔦 LiDAR</div>
-          <div class="pcard-sub">MSL Relabeling · LiDAR ONLY · SC3 Filtered</div>
-        </div>
-        <div class="pcard-icon">📡</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="week-nav-btns">
+        <button onclick="changeWeek(-1)" title="الأسبوع السابق">&#8594;</button>
+        <button onclick="changeWeek(1)"  title="الأسبوع التالي">&#8592;</button>
       </div>
-      <div class="stats2">
-        <div class="sbox">
-          <div class="sbox-lbl">FP Submitted</div>
-          <div class="sbox-val" id="l-fps" style="color:var(--fp)">0</div>
-          <div class="sbox-hint">هدف: <span id="l-fpt">1,500</span></div>
-        </div>
-        <div class="sbox">
-          <div class="sbox-lbl">QA Submitted</div>
-          <div class="sbox-val" id="l-qas" style="color:var(--qa)">0</div>
-          <div class="sbox-hint">هدف: <span id="l-qat">1,800</span></div>
-        </div>
-        <div class="sbox">
-          <div class="sbox-lbl">FP Remaining</div>
-          <div class="sbox-val" id="l-fpr" style="color:var(--warn)">—</div>
-        </div>
-        <div class="sbox">
-          <div class="sbox-lbl">QA Remaining</div>
-          <div class="sbox-val" id="l-qar" style="color:var(--warn)">—</div>
-        </div>
-      </div>
-      <div class="pbar-wrap">
-        <div class="pbar-top"><span>FP</span><span id="l-fp%">0%</span></div>
-        <div class="pbar"><div class="pbar-fill" id="l-fpb" style="width:0%;background:var(--fp)"></div></div>
-      </div>
-      <div class="pbar-wrap" style="margin-top:8px">
-        <div class="pbar-top"><span>QA</span><span id="l-qa%">0%</span></div>
-        <div class="pbar"><div class="pbar-fill" id="l-qab" style="width:0%;background:var(--qa)"></div></div>
-      </div>
-    </div>
-
-    <div class="pcard" style="--cc:var(--lane)">
-      <div class="pcard-header">
-        <div>
-          <div class="pcard-title">🛣️ Lane Line</div>
-          <div class="pcard-sub">LiDAR · IMAGE · MSL Relabeling</div>
-        </div>
-        <div class="pcard-icon">🗺️</div>
-      </div>
-      <div class="stats2">
-        <div class="sbox">
-          <div class="sbox-lbl">FP Submitted</div>
-          <div class="sbox-val" id="n-fps" style="color:var(--fp)">0</div>
-          <div class="sbox-hint">هدف: <span id="n-fpt">4,000</span></div>
-        </div>
-        <div class="sbox">
-          <div class="sbox-lbl">QA Submitted</div>
-          <div class="sbox-val" id="n-qas" style="color:var(--qa)">—</div>
-          <div class="sbox-hint">هدف: <span id="n-qat">—</span></div>
-        </div>
-        <div class="sbox">
-          <div class="sbox-lbl">FP Remaining</div>
-          <div class="sbox-val" id="n-fpr" style="color:var(--warn)">—</div>
-        </div>
-        <div class="sbox">
-          <div class="sbox-lbl">QA Remaining</div>
-          <div class="sbox-val" id="n-qar" style="color:var(--warn)">—</div>
-        </div>
-      </div>
-      <div class="pbar-wrap">
-        <div class="pbar-top"><span>FP</span><span id="n-fp%">0%</span></div>
-        <div class="pbar"><div class="pbar-fill" id="n-fpb" style="width:0%;background:var(--lane)"></div></div>
-      </div>
-      <div class="pbar-wrap" style="margin-top:8px">
-        <div class="pbar-top"><span>QA</span><span id="n-qa%">—</span></div>
-        <div class="pbar"><div class="pbar-fill" id="n-qab" style="width:0%;background:var(--qa)"></div></div>
-      </div>
+      <div class="week-pill" id="weekPill">—</div>
     </div>
   </div>
 
-  <!-- TABLE -->
-  <div class="tcard">
-    <div class="thead-bar">
-      <div class="thead-title">📅 سجل الأيام</div>
-      <button class="reset-btn" onclick="confirmReset()">🗑️ مسح الأسبوع</button>
+  <!-- Notice -->
+  <div class="notice info" id="noticeBar">
+    <span class="notice-icon">ℹ</span>
+    <span id="noticeMsg">في انتظار أول تقرير — الصق نص الشيفت في الحقل أدناه واضغط "تحليل".</span>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-strip">
+    <div class="kpi-box">
+      <div class="kpi-label">LiDAR · FP Submitted</div>
+      <div class="kpi-value" id="k-lfp">0</div>
+      <div class="kpi-meta">هدف: <span id="k-lfp-t">1,500</span></div>
     </div>
-    <table>
+    <div class="kpi-box right-border">
+      <div class="kpi-label">LiDAR · QA Submitted</div>
+      <div class="kpi-value" id="k-lqa">0</div>
+      <div class="kpi-meta">هدف: <span id="k-lqa-t">1,800</span></div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-label">Lane Line · FP Submitted</div>
+      <div class="kpi-value" id="k-sfp">0</div>
+      <div class="kpi-meta">هدف: <span id="k-sfp-t">4,000</span></div>
+    </div>
+    <div class="kpi-box right-border">
+      <div class="kpi-label">Lane Line · QA Submitted</div>
+      <div class="kpi-value" id="k-sqa">—</div>
+      <div class="kpi-meta" id="k-sqa-m">—</div>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="card section-gap">
+    <div class="card-head">
+      <span class="card-head-title">إدخال تقرير الشيفت</span>
+    </div>
+    <div class="card-body">
+      <div class="day-row">
+        <span class="field-label" style="margin:0">اليوم:</span>
+        <select id="dayPicker"></select>
+      </div>
+      <div class="input-row">
+        <textarea class="report-input" id="msgBox"
+          placeholder="For Lidar (MSL Relabeling &amp; LiDAR ONLY &amp; SC3 filtered) (9 Mar):&#10;Submitted: 946 FP LiDAR / 683 QA LiDAR&#10;Remaining: 554  FP Tasks from 1,500 tasks / 1,117 QA Tasks from 1,800 tasks&#10;For Lane Line (LiDAR &amp; IMAGE &amp; MSL Relabeling) (9 Mar):&#10;Submitted: 1,617 FP Lane Line / 1,266 QA Lane Line&#10;Remaining: 2,383 FP Tasks from 4000 tasks"></textarea>
+        <button class="btn-primary" onclick="parseMsg()">تحليل التقرير</button>
+      </div>
+      <div class="err-text" id="errMsg"></div>
+    </div>
+  </div>
+
+  <!-- Progress table -->
+  <div class="card section-gap">
+    <div class="card-head">
+      <span class="card-head-title">التقدم الإجمالي</span>
+    </div>
+    <table class="prog-table">
       <thead>
         <tr>
-          <th>اليوم</th>
-          <th>🔦 LiDAR FP</th>
-          <th>🔦 LiDAR QA</th>
-          <th>🛣️ Lane FP</th>
-          <th>🛣️ Lane QA</th>
-          <th>تقدم LiDAR</th>
-          <th>تقدم Lane</th>
+          <th>الفئة</th>
+          <th>النوع</th>
+          <th>المُنجز</th>
+          <th>المتبقي</th>
+          <th style="min-width:130px">نسبة الإنجاز</th>
+          <th>الحالة</th>
         </tr>
       </thead>
-      <tbody id="tBody"></tbody>
+      <tbody id="progBody"></tbody>
     </table>
   </div>
 
-  <div class="alert info2" id="alertBar">
-    <span>💡</span><span id="alertMsg">الصق تقرير الشيفت واضغط تحليل — السيستم يحسب كل حاجة لوحده</span>
+  <!-- Daily log -->
+  <div class="card">
+    <div class="card-head">
+      <span class="card-head-title">سجل أيام الأسبوع</span>
+      <button class="btn-danger" onclick="confirmReset()">مسح البيانات</button>
+    </div>
+    <table class="log-table">
+      <thead>
+        <tr>
+          <th>اليوم / التاريخ</th>
+          <th>LiDAR FP</th>
+          <th>LiDAR QA</th>
+          <th>Lane FP</th>
+          <th>Lane QA</th>
+          <th>تقدم LiDAR FP</th>
+          <th>تقدم Lane FP</th>
+        </tr>
+      </thead>
+      <tbody id="logBody"></tbody>
+    </table>
   </div>
 
 </main>
-<script>
-// ── CONFIG ──────────────────────────────────────────
-const BASE = new Date('2026-03-10T00:00:00');
-const DAYS = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
 
-let T = { lidar:{fp:1500,qa:1800}, lane:{fp:4000,qa:null} };
+<script>
+// ── CONFIG ────────────────────────────────────────────
+const BASE = new Date('2026-03-09T00:00:00');
+const DAY_NAMES = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+
+let T = { lidar:{ fp:1500, qa:1800 }, lane:{ fp:4000, qa:null } };
 let weekOffset = 0;
 
-// ── STORAGE ──────────────────────────────────────────
-function weekStart(off){ const d=new Date(BASE); d.setDate(BASE.getDate()+off*7); return d; }
-function wKey(off){ return 'wln3_'+weekStart(off).toISOString().slice(0,10); }
-function emptyWeek(){ return Array(7).fill(0).map(()=>({lidar:{fp:0,qa:0},lane:{fp:0,qa:0},hasData:false})); }
-function load(){ try{ const s=localStorage.getItem(wKey(weekOffset)); if(s)return JSON.parse(s); }catch(e){} return emptyWeek(); }
-function save(d){ try{ localStorage.setItem(wKey(weekOffset),JSON.stringify(d)); }catch(e){} }
+// ── STORAGE ───────────────────────────────────────────
+function weekStart(off) {
+  const d = new Date(BASE);
+  d.setDate(BASE.getDate() + off * 7);
+  return d;
+}
+function wKey(off) { return 'wln4_' + weekStart(off).toISOString().slice(0,10); }
+function emptyWeek() { return Array(7).fill(0).map(() => ({ lidar:{fp:0,qa:0}, lane:{fp:0,qa:0}, hasData:false })); }
+function load()  { try { const s = localStorage.getItem(wKey(weekOffset)); if(s) return JSON.parse(s); } catch(e){} return emptyWeek(); }
+function save(d) { try { localStorage.setItem(wKey(weekOffset), JSON.stringify(d)); } catch(e){} }
 
 let days = load();
 
-// ── HELPERS ──────────────────────────────────────────
-const n  = s => parseInt(String(s).replace(/,/g,''))||0;
-const fmt = d => d.toLocaleDateString('ar-EG',{month:'short',day:'numeric'});
-const num = v => v==null?'—':Number(v).toLocaleString('en');
-const pct = (s,t) => t?Math.min(100,s/t*100):0;
+// ── HELPERS ───────────────────────────────────────────
+const n    = s => parseInt(String(s).replace(/,/g,'')) || 0;
+const fmtD = d => d.toLocaleDateString('ar-EG', { month:'short', day:'numeric' });
+const num  = v => v == null ? '—' : Number(v).toLocaleString('en');
+const pct  = (s,t) => t ? Math.min(100, s/t*100) : 0;
 
-function todayIdx(){
-  const now=new Date(); now.setHours(0,0,0,0);
-  const ws=weekStart(weekOffset);
-  const d=Math.floor((now-ws)/86400000);
-  return (d>=0&&d<=6)?d:-1;
+function todayIdx() {
+  const now = new Date(); now.setHours(0,0,0,0);
+  const diff = Math.floor((now - weekStart(weekOffset)) / 86400000);
+  return (diff >= 0 && diff <= 6) ? diff : -1;
 }
 
-// ── CLOCK ────────────────────────────────────────────
-setInterval(()=>{
-  const t=new Date();
-  document.getElementById('clock').textContent=
-    String(t.getHours()).padStart(2,'0')+':'+
-    String(t.getMinutes()).padStart(2,'0')+':'+
-    String(t.getSeconds()).padStart(2,'0');
-},1000);
+// ── CLOCK & DATE ──────────────────────────────────────
+function tick() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    String(now.getHours()).padStart(2,'0') + ':' +
+    String(now.getMinutes()).padStart(2,'0') + ':' +
+    String(now.getSeconds()).padStart(2,'0');
 
-// ── WEEK NAV ─────────────────────────────────────────
-function changeWeek(dir){ weekOffset+=dir; days=load(); renderAll(); }
+  // Today's date in header — Arabic full date
+  document.getElementById('headerDay').textContent =
+    now.toLocaleDateString('ar-EG', { weekday: 'long' });
+  document.getElementById('headerDate').textContent =
+    now.toLocaleDateString('ar-EG', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+setInterval(tick, 1000);
+tick();
 
-// ── DAY PICKER ───────────────────────────────────────
-function buildDayPicker(){
-  const sel=document.getElementById('dayPicker');
-  sel.innerHTML='';
-  const ws=weekStart(weekOffset);
-  const ti=todayIdx();
-  for(let i=0;i<7;i++){
-    const d=new Date(ws); d.setDate(ws.getDate()+i);
-    const opt=document.createElement('option');
-    opt.value=i;
-    opt.textContent=DAYS[i]+' '+fmt(d)+(i===ti?' ← اليوم':'');
-    if(i===ti) opt.selected=true;
+// ── WEEK NAV ──────────────────────────────────────────
+function changeWeek(dir) { weekOffset += dir; days = load(); renderAll(); }
+
+// ── DAY PICKER ────────────────────────────────────────
+function buildDayPicker() {
+  const sel = document.getElementById('dayPicker');
+  const prev = parseInt(sel.value);
+  sel.innerHTML = '';
+  const ws = weekStart(weekOffset);
+  const ti = todayIdx();
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(ws); d.setDate(ws.getDate() + i);
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = DAY_NAMES[i] + '  ' + fmtD(d) + (i === ti ? '  ← اليوم' : '');
+    if (i === ti) opt.selected = true;
     sel.appendChild(opt);
   }
-  if(ti<0) sel.options[0].selected=true;
+  if (ti < 0 && !isNaN(prev)) sel.value = prev;
 }
 
-// ── PARSER ───────────────────────────────────────────
-function parseMsg(){
-  const raw=document.getElementById('msgBox').value.trim();
-  const err=document.getElementById('errMsg');
-  err.textContent='';
-  if(!raw){ err.textContent='⚠️ الرسالة فاضية!'; return; }
+// ── PARSER ────────────────────────────────────────────
+function parseMsg() {
+  const raw = document.getElementById('msgBox').value.trim();
+  const err = document.getElementById('errMsg');
+  err.textContent = '';
+  if (!raw) { err.textContent = 'الحقل فارغ — الرجاء لصق نص التقرير.'; return; }
 
   const dayIdx = parseInt(document.getElementById('dayPicker').value);
 
-  // LiDAR submitted
   const lSub = raw.match(/Submitted:\s*([\d,]+)\s*FP\s*LiDAR\s*\/\s*([\d,]+)\s*QA\s*LiDAR/i);
-  // LiDAR remaining (to extract targets)
   const lRem = raw.match(/Remaining:\s*([\d,]+)\s*FP\s*Tasks?\s*from\s*([\d,]+)\s*tasks?\s*\/\s*([\d,]+)\s*QA\s*Tasks?\s*from\s*([\d,]+)\s*tasks?/i);
-  // Lane submitted
   const sSub = raw.match(/Submitted:\s*([\d,]+)\s*FP\s*Lane\s*Line(?:\s*\/\s*([\d,]+)\s*QA\s*Lane\s*Line)?/i);
-  // Lane remaining
   const sRem = raw.match(/For Lane.*?Remaining:\s*([\d,]+)\s*FP\s*Tasks?\s*from\s*([\d,]+)\s*tasks?/is);
 
-  if(!lSub&&!sSub){ err.textContent='⚠️ مش قادر أحلل — تأكد من شكل الرسالة'; return; }
+  if (!lSub && !sSub) { err.textContent = 'تعذّر تحليل النص — تحقق من صيغة التقرير.'; return; }
 
-  // Update targets from message
-  if(lRem){ T.lidar.fp=n(lRem[2]); T.lidar.qa=n(lRem[4]); }
-  if(sRem){ T.lane.fp=n(sRem[2]); }
+  if (lRem) { T.lidar.fp = n(lRem[2]); T.lidar.qa = n(lRem[4]); }
+  if (sRem) { T.lane.fp  = n(sRem[2]); }
 
-  // Save — الرسالة cumulative snapshot لليوم ده
-  if(!days[dayIdx]) days[dayIdx]={lidar:{fp:0,qa:0},lane:{fp:0,qa:0},hasData:false};
-  if(lSub){ days[dayIdx].lidar.fp=n(lSub[1]); days[dayIdx].lidar.qa=n(lSub[2]); }
-  if(sSub){ days[dayIdx].lane.fp=n(sSub[1]); if(sSub[2]) days[dayIdx].lane.qa=n(sSub[2]); }
-  days[dayIdx].hasData=true;
+  if (!days[dayIdx]) days[dayIdx] = { lidar:{fp:0,qa:0}, lane:{fp:0,qa:0}, hasData:false };
+  if (lSub) { days[dayIdx].lidar.fp = n(lSub[1]); days[dayIdx].lidar.qa = n(lSub[2]); }
+  if (sSub) { days[dayIdx].lane.fp  = n(sSub[1]); if (sSub[2]) days[dayIdx].lane.qa = n(sSub[2]); }
+  days[dayIdx].hasData = true;
 
   save(days);
-  document.getElementById('msgBox').value='';
+  document.getElementById('msgBox').value = '';
   renderAll();
 }
 
 // ── TOTALS ────────────────────────────────────────────
-function totals(){
-  // الرسائل cumulative — نأخذ أعلى قيمة per day (آخر snapshot)
-  // ثم نجمع كل الأيام
-  let lFP=0,lQA=0,sFP=0,sQA=0;
-  days.forEach(d=>{ lFP+=d.lidar?.fp||0; lQA+=d.lidar?.qa||0; sFP+=d.lane?.fp||0; sQA+=d.lane?.qa||0; });
-  return {lFP,lQA,sFP,sQA};
+function totals() {
+  let lFP=0, lQA=0, sFP=0, sQA=0;
+  days.forEach(d => { lFP += d.lidar?.fp||0; lQA += d.lidar?.qa||0; sFP += d.lane?.fp||0; sQA += d.lane?.qa||0; });
+  return { lFP, lQA, sFP, sQA };
 }
 
 // ── RENDER ────────────────────────────────────────────
-function renderAll(){
+function render() {
   buildDayPicker();
 
-  // Week bar
-  const ws=weekStart(weekOffset),we=new Date(ws); we.setDate(ws.getDate()+6);
-  document.getElementById('wklabel').textContent =
-    weekOffset===0?'الأسبوع الحالي':weekOffset<0?`أسبوع سابق (${Math.abs(weekOffset)})`:` أسبوع قادم (${weekOffset})`;
-  document.getElementById('wkrange').textContent=fmt(ws)+' (أحد) → '+fmt(we)+' (سبت)';
+  // Week pill
+  const ws = weekStart(weekOffset), we = new Date(ws); we.setDate(ws.getDate()+6);
+  const wLabel = weekOffset === 0 ? 'الأسبوع الحالي' : weekOffset < 0 ? `أسبوع سابق (${Math.abs(weekOffset)})` : `أسبوع قادم (${weekOffset})`;
+  document.getElementById('weekPill').textContent = wLabel + '  |  ' + fmtD(ws) + ' ← ' + fmtD(we);
 
-  const {lFP,lQA,sFP,sQA}=totals();
+  const { lFP, lQA, sFP, sQA } = totals();
 
-  // ── LiDAR card ──
-  const lfp=pct(lFP,T.lidar.fp), lqp=pct(lQA,T.lidar.qa);
-  document.getElementById('l-fps').textContent=num(lFP);
-  document.getElementById('l-qas').textContent=num(lQA);
-  document.getElementById('l-fpt').textContent=num(T.lidar.fp);
-  document.getElementById('l-qat').textContent=num(T.lidar.qa);
-  document.getElementById('l-fpr').textContent=num(Math.max(0,T.lidar.fp-lFP));
-  document.getElementById('l-qar').textContent=num(Math.max(0,T.lidar.qa-lQA));
-  document.getElementById('l-fpb').style.width=lfp+'%';
-  document.getElementById('l-qab').style.width=lqp+'%';
-  document.getElementById('l-fp%').textContent=Math.round(lfp)+'%';
-  document.getElementById('l-qa%').textContent=Math.round(lqp)+'%';
+  // KPI
+  document.getElementById('k-lfp').textContent   = num(lFP);
+  document.getElementById('k-lqa').textContent   = num(lQA);
+  document.getElementById('k-sfp').textContent   = num(sFP);
+  document.getElementById('k-sqa').textContent   = sQA > 0 ? num(sQA) : '—';
+  document.getElementById('k-lfp-t').textContent = num(T.lidar.fp);
+  document.getElementById('k-lqa-t').textContent = num(T.lidar.qa);
+  document.getElementById('k-sfp-t').textContent = num(T.lane.fp);
+  document.getElementById('k-sqa-m').textContent = T.lane.qa ? 'هدف: ' + num(T.lane.qa) : '—';
 
-  // ── Lane card ──
-  const sfp=pct(sFP,T.lane.fp), sqp=T.lane.qa?pct(sQA,T.lane.qa):0;
-  document.getElementById('n-fps').textContent=num(sFP);
-  document.getElementById('n-qas').textContent=sQA>0?num(sQA):'—';
-  document.getElementById('n-fpt').textContent=num(T.lane.fp);
-  document.getElementById('n-qat').textContent=T.lane.qa?num(T.lane.qa):'—';
-  document.getElementById('n-fpr').textContent=num(Math.max(0,T.lane.fp-sFP));
-  document.getElementById('n-qar').textContent=T.lane.qa?num(Math.max(0,T.lane.qa-sQA)):'—';
-  document.getElementById('n-fpb').style.width=sfp+'%';
-  document.getElementById('n-qab').style.width=sqp+'%';
-  document.getElementById('n-fp%').textContent=Math.round(sfp)+'%';
-  document.getElementById('n-qa%').textContent=T.lane.qa?Math.round(sqp)+'%':'—';
+  // Progress table
+  const rows = [
+    { cat:'LiDAR',     type:'First Pass (FP)',        val:lFP,  target:T.lidar.fp, cls:'' },
+    { cat:'LiDAR',     type:'Quality Assurance (QA)', val:lQA,  target:T.lidar.qa, cls:'qa' },
+    { cat:'Lane Line', type:'First Pass (FP)',         val:sFP,  target:T.lane.fp,  cls:'' },
+    { cat:'Lane Line', type:'Quality Assurance (QA)', val:sQA,  target:T.lane.qa,  cls:'qa' },
+  ];
 
-  // ── Table ──
-  const tbody=document.getElementById('tBody');
-  tbody.innerHTML='';
-  const ti=todayIdx();
-  days.forEach((d,i)=>{
-    const dayDate=new Date(ws); dayDate.setDate(ws.getDate()+i);
-    const isToday=(i===ti);
-    const has=d.hasData;
-    const lFPp=pct(d.lidar?.fp,T.lidar.fp), sFPp=pct(d.lane?.fp,T.lane.fp);
-    const tr=document.createElement('tr');
-    if(isToday) tr.className='today-row';
-    tr.innerHTML=`
-      <td><span class="daydot"></span><strong>${DAYS[i]}</strong><br><span style="font-size:10px;color:var(--muted)">${fmt(dayDate)}${isToday?'<span style="color:var(--fp);margin-right:4px"> ← اليوم</span>':''}</span></td>
-      <td>${has?`<span class="nfp">${num(d.lidar?.fp)}</span><div style="font-size:10px;color:var(--muted)">/ ${num(T.lidar.fp)}</div>`:'<span style="color:var(--muted)">—</span>'}</td>
-      <td>${has?`<span class="nqa">${num(d.lidar?.qa)}</span><div style="font-size:10px;color:var(--muted)">/ ${num(T.lidar.qa)}</div>`:'<span style="color:var(--muted)">—</span>'}</td>
-      <td>${has?`<span class="nfp">${num(d.lane?.fp)}</span><div style="font-size:10px;color:var(--muted)">/ ${num(T.lane.fp)}</div>`:'<span style="color:var(--muted)">—</span>'}</td>
-      <td>${(has&&d.lane?.qa>0)?`<span class="nqa">${num(d.lane?.qa)}</span>`:'<span style="color:var(--muted)">—</span>'}</td>
-      <td>${has?`<div class="pmini"><div class="pmini-f" style="width:${lFPp}%;background:var(--lidar)"></div></div><div style="font-size:10px;color:var(--muted);margin-top:2px">${Math.round(lFPp)}%</div>`:'—'}</td>
-      <td>${has?`<div class="pmini"><div class="pmini-f" style="width:${sFPp}%;background:var(--lane)"></div></div><div style="font-size:10px;color:var(--muted);margin-top:2px">${Math.round(sFPp)}%</div>`:'—'}</td>
+  const pb = document.getElementById('progBody');
+  pb.innerHTML = '';
+  rows.forEach(r => {
+    const p   = pct(r.val, r.target);
+    const rem = r.target != null ? Math.max(0, r.target - r.val) : null;
+    let bClass, bText;
+    if (r.target == null)   { bClass='s-none'; bText='—'; }
+    else if (p >= 100)      { bClass='s-done'; bText='مكتمل'; }
+    else if (p >= 70)       { bClass='s-prog'; bText='جاري'; }
+    else if (p >= 30)       { bClass='s-warn'; bText='يحتاج متابعة'; }
+    else if (r.val > 0)     { bClass='s-late'; bText='متأخر'; }
+    else                    { bClass='s-none'; bText='لم يبدأ'; }
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="cat-label">${r.cat}</span></td>
+      <td><span class="type-label">${r.type}</span></td>
+      <td>
+        <div class="metric-num">${r.val > 0 ? num(r.val) : '—'}</div>
+        ${r.target != null ? `<div class="metric-of">من ${num(r.target)}</div>` : ''}
+      </td>
+      <td><div class="metric-num">${rem != null && r.val > 0 ? num(rem) : '—'}</div></td>
+      <td>
+        ${r.target != null ? `
+          <div class="pbar-track"><div class="pbar-fill ${r.cls}" style="width:${p}%"></div></div>
+          <div class="pbar-pct">${Math.round(p)}%</div>
+        ` : '<span style="color:var(--muted)">—</span>'}
+      </td>
+      <td><span class="status-badge ${bClass}">${bText}</span></td>
     `;
-    tbody.appendChild(tr);
+    pb.appendChild(tr);
   });
 
-  // ── Alert ──
-  const bar=document.getElementById('alertBar'),msg=document.getElementById('alertMsg');
-  const avg=(pct(lFP,T.lidar.fp)+pct(sFP,T.lane.fp))/2;
-  if(avg>=100){bar.className='alert ok2';msg.textContent='🎉 مبروك! كل الأهداف الأسبوعية اتحققت!';}
-  else if(avg>=70){bar.className='alert ok2';msg.textContent=`💪 ممتاز! LiDAR FP ${Math.round(pct(lFP,T.lidar.fp))}% · Lane FP ${Math.round(pct(sFP,T.lane.fp))}%`;}
-  else if(avg>0){bar.className='alert info2';msg.textContent=`⚡ LiDAR FP: ${num(lFP)} / ${num(T.lidar.fp)} · Lane FP: ${num(sFP)} / ${num(T.lane.fp)} · QA LiDAR: ${num(lQA)} / ${num(T.lidar.qa)}`;}
-  else{bar.className='alert info2';msg.textContent='💡 الصق تقرير الشيفت واضغط تحليل — السيستم يحسب كل حاجة لوحده';}
+  // Log
+  const lb = document.getElementById('logBody');
+  lb.innerHTML = '';
+  const anyData = days.some(d => d.hasData);
+  if (!anyData) {
+    lb.innerHTML = '<tr class="empty-row"><td colspan="7">لا توجد بيانات لهذا الأسبوع</td></tr>';
+  } else {
+    const ti = todayIdx();
+    days.forEach((d, i) => {
+      const dd = new Date(ws); dd.setDate(ws.getDate() + i);
+      const isToday = (i === ti);
+      const tr = document.createElement('tr');
+      if (isToday) tr.style.background = 'var(--blue-xpale)';
+      const dayLabel = `<strong>${DAY_NAMES[i]}</strong> <span style="font-size:11px;color:var(--muted)">${fmtD(dd)}${isToday ? '&nbsp;← اليوم' : ''}</span>`;
+      const lFPp = pct(d.lidar?.fp, T.lidar.fp);
+      const sFPp = pct(d.lane?.fp,  T.lane.fp);
+      tr.innerHTML = `
+        <td>${dayLabel}</td>
+        <td>${d.hasData ? `<span class="log-num">${num(d.lidar?.fp)}</span>` : '<span style="color:var(--muted)">—</span>'}</td>
+        <td>${d.hasData ? `<span class="log-num">${num(d.lidar?.qa)}</span>` : '<span style="color:var(--muted)">—</span>'}</td>
+        <td>${d.hasData ? `<span class="log-num">${num(d.lane?.fp)}</span>`  : '<span style="color:var(--muted)">—</span>'}</td>
+        <td>${d.hasData && d.lane?.qa > 0 ? `<span class="log-num">${num(d.lane?.qa)}</span>` : '<span style="color:var(--muted)">—</span>'}</td>
+        <td>${d.hasData ? `<div class="pbar-track" style="min-width:80px"><div class="pbar-fill" style="width:${lFPp}%"></div></div><div class="pbar-pct">${Math.round(lFPp)}%</div>` : '—'}</td>
+        <td>${d.hasData ? `<div class="pbar-track" style="min-width:80px"><div class="pbar-fill" style="width:${sFPp}%"></div></div><div class="pbar-pct">${Math.round(sFPp)}%</div>` : '—'}</td>
+      `;
+      lb.appendChild(tr);
+    });
+  }
+
+  // Notice
+  const nb  = document.getElementById('noticeBar');
+  const nm  = document.getElementById('noticeMsg');
+  const avg = (pct(lFP, T.lidar.fp) + pct(sFP, T.lane.fp)) / 2;
+  if (avg >= 100)     { nb.className='notice ok';    nm.textContent='تم تحقيق جميع الأهداف المطلوبة لهذه الفترة.'; }
+  else if (avg >= 70) { nb.className='notice ok';    nm.textContent=`نسبة الإنجاز ${Math.round(avg)}% — الأداء جيد ويسير وفق المستهدف.`; }
+  else if (avg >= 30) { nb.className='notice warn';  nm.textContent=`نسبة الإنجاز ${Math.round(avg)}% — يُوصى بمتابعة الفرق لضمان الوصول للهدف في الوقت المحدد.`; }
+  else if (avg > 0)   { nb.className='notice error'; nm.textContent=`نسبة الإنجاز ${Math.round(avg)}% — التقدم بطيء، يستلزم تصعيد المتابعة.`; }
+  else                { nb.className='notice info';  nm.textContent='في انتظار أول تقرير — الصق نص الشيفت في الحقل أدناه واضغط "تحليل".'; }
 }
 
-function confirmReset(){
-  if(confirm('مسح كل بيانات الأسبوع ده؟')){days=emptyWeek();save(days);renderAll();}
+function confirmReset() {
+  if (confirm('هل تريد مسح جميع بيانات هذا الأسبوع؟\nلا يمكن التراجع عن هذا الإجراء.')) {
+    days = emptyWeek(); save(days); render();
+  }
 }
 
-renderAll();
+render();
 </script>
 </body>
 </html>
